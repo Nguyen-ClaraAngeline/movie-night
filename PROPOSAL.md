@@ -4,21 +4,21 @@
 - **Name:** Life
 - **Project title:** Life – Your Personal Life Dashboard
 - **Pitch (one sentence):** A personalized productivity platform that brings together calendars, tasks, personal goals, habits and projects in one place, helping users organize their everyday lives.
-- **Target users:** ME and anyone who wants to better organize their personal and professional life.
+- **Target users:** Myself and anyone who wants to better organize their personal and professional life.
 
 ## Pages
 
 | **URL** | **Content** | **Dynamic segment?** | **Rendering strategy and why** |
 |---|---|---|---|
-| `/` | Landing page presenting Dayly, its features and a call to action. | No | Static generation (SSG): content is mostly fixed and doesn't need frequent updates. |
-| `/dashboard` | Personalized overview: today's events, pending tasks, habits and progress on goals. | No | Dynamic rendering: information depends on the authenticated user and changes frequently. |
-| `/calendar` | Monthly, weekly and daily calendar with events and deadlines. | No | Dynamic rendering: events are user-specific and frequently updated. |
-| `/tasks` | Task list with priorities, categories, deadlines and completion status. | No | Dynamic rendering: tasks are user-specific and frequently modified. |
-| `/goals` | Personal goals with progress indicators and milestones. | No | Dynamic rendering: displays each user's current progress. |
-| `/habits` | Habit tracker with daily check-ins and weekly statistics. | No | Dynamic rendering: tracking data changes every day. |
-| `/projects` | Personal projects with descriptions, tasks and progress. | No | Dynamic rendering: projects and their associated tasks are user-specific. |
-| `/projects/[id]` | Detailed view of one project, including its tasks, deadlines and progress. | Yes (`id`) | Dynamic rendering: content depends on the selected project and its data. |
-| `/settings` | User profile, preferences and calendar integration settings. | No | Dynamic rendering: settings are specific to the authenticated user. |
+| `/` | Landing page presenting Life, its features and a call to action. | No | **SSG:** The content is mostly fixed and can be generated at build time. |
+| `/dashboard` | Personalized overview: today's events, pending tasks, habits and progress on goals. | No | **SSR:** The dashboard depends on the authenticated user and their latest data. |
+| `/calendar` | Monthly, weekly and daily calendar with events and deadlines. | No | **CSR:** Users frequently interact with the calendar, navigate dates and update events. |
+| `/tasks` | Task list with priorities, categories, deadlines and completion status. | No | **CSR:** Users frequently add, edit, complete and delete tasks. |
+| `/goals` | Personal goals with progress indicators and milestones. | No | **SSR:** Goals and progress are specific to each authenticated user. |
+| `/habits` | Habit tracker with daily check-ins and weekly statistics. | No | **CSR:** Users need to interact with and update their habits daily. |
+| `/projects` | Personal projects with descriptions, tasks and progress. | No | **SSR:** The displayed projects depend on the authenticated user. |
+| `/projects/[id]` | Detailed view of one project, including its tasks, deadlines and progress. | Yes (`id`) | **SSR:** The page needs to retrieve the specific project using its ID. |
+| `/settings` | User profile, preferences and calendar integration settings. | No | **SSR:** Settings are private and specific to the authenticated user. |
 
 ## Data
 
@@ -82,4 +82,4 @@ GitHub URL: To be created.
 
 **Technical stack:** Next.js (React), TypeScript, Tailwind CSS, Prisma ORM and PostgreSQL.
 
-**Main differentiator:** Dayly doesn't aim to replace Outlook or Google Calendar. It centralizes personal organization around the calendar by combining appointments with tasks, projects and everyday priorities.
+**Main differentiator:** Life doesn't aim to replace Outlook or Google Calendar. It centralizes personal organization around the calendar by combining appointments with tasks, projects and everyday priorities.
