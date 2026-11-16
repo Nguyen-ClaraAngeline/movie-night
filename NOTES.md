@@ -43,3 +43,20 @@
 
 #### Which version would you choose for a public movie catalogue that changes once a week, and why?
 * The static server-rendered version, without `force-dynamic`. It loads quickly, includes the titles for search engines, and can be rebuilt when the catalogue changes.
+
+**#### Lab 3**
+
+How can `aria-current="true"` already appear in the page source if `NavLink` uses `usePathname`?
+* Client Components can still be pre-rendered into HTML on the server. Next.js knows the current URL, so it renders `aria-current="true"` in the initial HTML. The browser then hydrates the component.
+
+Why does `generateStaticParams` return `String(movie.id)` instead of `movie.id`? And why does `/movies/42` return a 404 without running the page code?
+* URL parameters are strings, so `String(movie.id)` converts the numeric ID into a string. In Part C, `dynamicParams` is disabled, so Next.js only accepts the IDs returned by `generateStaticParams`. Since 42 is not included, Next.js returns a 404 before rendering the page.
+
+Why is the note kept between `/movies` and `/movies/2`, but lost when navigating through `/about`?
+* Both `/movies` and `/movies/2` share `app/movies/layout.tsx`, so the layout stays mounted and preserves the note. `/about` is outside this layout, so navigating there unmounts it and the note is lost.
+
+In Part E, step 4, where is the real message of the error, and why does Next.js not send it to the browser?
+* The full error message is available in the server terminal or logs. Next.js only sends a generic error message and an error digest to the browser to avoid exposing sensitive information about the server.
+
+Why does "Loading the movies..." appear under `npm run dev` on `/movies/2`, but not under `npm start`, while it still appears on `/movies`?
+* In development, Next.js renders routes on demand, so the loading fallback can appear while the page is being prepared. In production, `/movies/2` is statically generated using `generateStaticParams`, so its HTML is already prepared during the build. `/movies` still displays the loading message because it loads its movie list dynamically.
