@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getMovie, getMovies } from "@/lib/movies";
+import { ShortlistButton } from "@/components/shortlist-button";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -39,6 +40,7 @@ export default async function MoviePage({ params }: Props) {
       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
         Rendered at {new Date().toISOString()}
       </p>
+      <ShortlistButton movieTitle={movie.title} />
       <Link href="/movies" className="mt-6 inline-block underline">
         Back to all movies
       </Link>
