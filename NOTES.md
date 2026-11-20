@@ -44,7 +44,7 @@
 #### Which version would you choose for a public movie catalogue that changes once a week, and why?
 * The static server-rendered version, without `force-dynamic`. It loads quickly, includes the titles for search engines, and can be rebuilt when the catalogue changes.
 
-**#### Lab 3**
+#### Lab 2 ####
 
 How can `aria-current="true"` already appear in the page source if `NavLink` uses `usePathname`?
 * Client Components can still be pre-rendered into HTML on the server. Next.js knows the current URL, so it renders `aria-current="true"` in the initial HTML. The browser then hydrates the component.
@@ -60,3 +60,14 @@ In Part E, step 4, where is the real message of the error, and why does Next.js 
 
 Why does "Loading the movies..." appear under `npm run dev` on `/movies/2`, but not under `npm start`, while it still appears on `/movies`?
 * In development, Next.js renders routes on demand, so the loading fallback can appear while the page is being prepared. In production, `/movies/2` is statically generated using `generateStaticParams`, so its HTML is already prepared during the build. `/movies` still displays the loading message because it loads its movie list dynamically.
+
+#### Lab 3 ####
+
+#### After `npm run build` with the API running, the terminal of the API shows 7 calls. Which calls are they? `generateMetadata` and the page of a movie both call `getMovie`: why does the API receive only one call for each movie?
+* The API receives 7 calls to retrieve the movies. `generateMetadata` and the movie page both call `getMovie`, but Next.js deduplicates identical requests during rendering, so only one API call is made for each movie.
+
+#### In break 3, where did the value of `MOVIES_API_KEY` end up, who can read it, and where should the key be used instead?
+* The `MOVIES_API_KEY` was exposed to the client, meaning users could potentially retrieve it through the browser or the client-side code. It should be stored in a server-side environment variable and used only in server-side code to make requests to the Movies API.
+
+#### Explain in your own words why Next.js refuses a function as a prop (break 1) and a `server-only` import in a Client Component (break 2.
+* Next.js refuses a function as a prop because functions cannot be serialized and passed from a Server Component to a Client Component. It also refuses `server-only` imports in Client Components because server-only code must never be executed or exposed in the browser, helping protect server logic and secrets.
