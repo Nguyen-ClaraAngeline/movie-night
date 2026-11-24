@@ -71,3 +71,29 @@ Why does "Loading the movies..." appear under `npm run dev` on `/movies/2`, but 
 
 #### Explain in your own words why Next.js refuses a function as a prop (break 1) and a `server-only` import in a Client Component (break 2.
 * Next.js refuses a function as a prop because functions cannot be serialized and passed from a Server Component to a Client Component. It also refuses `server-only` imports in Client Components because server-only code must never be executed or exposed in the browser, helping protect server logic and secrets.
+
+#### Lab 4, part 2 ####
+
+#### 1. Complete the table of part E: each page of Movie Night, its strategy (SSG, ISR, SSR or CSR) and why this strategy fits the page. Add the real build output next to your predictions.
+Page	Strategy	Build output	Why?
+/movies	ISR	○ /movies (10s)	The movie list is regenerated in the background every 10 seconds, keeping it reasonably up to date while serving cached pages.
+/movies/[id]	SSG	● /movies/[id]	Each movie page is generated at build time using generateStaticParams.
+/	SSR	ƒ /	The homepage needs fresh vote data on every request. Streaming allows the page to display its content before the top 3 is ready.
+/movies-client	CSR	○ /movies-client (verify with your actual build)	The browser fetches the movie list after the page loads, using useEffect.
+
+#### 2. After rm -rf .next/cache, the build makes 8 calls to the API. Which calls are they?
+- 1 call to /api/movies from generateStaticParams.
+- 1 call to /api/movies for the /movies page.
+- 6 calls to /api/movies/1, /api/movies/2, /api/movies/3, /api/movies/4, /api/movies/5 and /api/movies/6.
+The requests from generateMetadata and the movie page are deduplicated because they use the same URL and the same fetch options (cache: "force-cache").
+
+#### 3. The home page took about 2.5 s without <Suspense>, then 2.5 s with it, then 1.5 s with Promise.all. What does each change improve: the first byte, the total, or both? Why?
+- Without Suspense, both the first byte and the total response time are about 2.5 seconds because the page waits for the data before sending anything.
+- Adding Suspense improves the first byte (below 0.1 seconds), because the page can send its content and the fallback immediately. The total remains about 2.5 seconds because the requests are still sequential.
+- Using Promise.all improves the total time (about 1.5 seconds), because both API requests run in parallel instead of one after the other. The first byte remains below 0.1 seconds.
+#### 4. Complete the table of part H: what happens when the API is down?
+Page	What you see	Why, with the strategy of the page
+/movies	The movie list still appears.	ISR serves the last successfully generated page from the cache.
+/movies/2	The movie details still appear.	SSG generated the page at build time, so it does not need the API for each request.
+/	The title and "Counting the votes..." appear, but the top 3 list fails to load.	SSR fetches fresh data on every request. The Suspense fallback is sent first, but the API request fails.
+/movies-client	"Loading movies..." appears, followed by the error message.	CSR fetches data directly from the browser. Since the API is down, the request fails and failed becomes true.

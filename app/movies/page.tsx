@@ -1,8 +1,7 @@
+
 import type { Metadata } from "next"
 import { MovieList } from "@/components/movie-list"
 import { getMovies } from "@/lib/movies"
-
-export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Movies | Movie Night",
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default async function MoviesPage() {
-  const movies = await getMovies()
+  const movies = await getMovies({ next: { revalidate: 10 } })
   console.log(`[movies] rendered ${movies.length} movies`)
 
   return (
