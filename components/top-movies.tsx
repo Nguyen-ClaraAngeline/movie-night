@@ -8,14 +8,10 @@ const timeFormat = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Europe/Paris",
 });
 
-// Async Server Component: fetches its own data on the server.
-// No cache: the votes change all the time.
+// Async Server Component: it calls the data layer directly, not /api/votes.
+// The two reads do not depend on each other: start them together.
 export async function TopMovies() {
-  // Run both independent requests in parallel
-  const [movies, { votes, countedAt }] = await Promise.all([
-    getMovies({ cache: "no-store" }),
-    getVotes({ cache: "no-store" }),
-  ]);
+  const [movies, { votes, countedAt }] = await Promise.all([getMovies(), getVotes()]);
 
   const top = [...votes]
     .sort((a, b) => b.count - a.count)

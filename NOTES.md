@@ -97,3 +97,17 @@ Page	What you see	Why, with the strategy of the page
 /movies/2	The movie details still appear.	SSG generated the page at build time, so it does not need the API for each request.
 /	The title and "Counting the votes..." appear, but the top 3 list fails to load.	SSR fetches fresh data on every request. The Suspense fallback is sent first, but the API request fails.
 /movies-client	"Loading movies..." appears, followed by the error message.	CSR fetches data directly from the browser. Since the API is down, the request fails and failed becomes true.
+
+#### Lab 5 Part 1 ####
+
+#### Why does `/api/movies/abc` answer 400, and `/api/movies/99` answer 404? What does the difference tell the client?
+
+   * `/api/movies/abc` returns 400 because the ID is not a valid positive whole number. `/api/movies/99` returns 404 because the ID is valid, but no movie with that ID exists. This tells the client whether the request is invalid or the requested resource cannot be found.
+
+#### The home page needs the votes. Why does `TopMovies` call `getVotes()` from `lib/`, and not `fetch("http://localhost:3000/api/votes")`?
+
+   * `TopMovies` is an Async Server Component, so it can call the data layer directly. This avoids making an unnecessary HTTP request to the application's own API. It also uses `Promise.all()` to retrieve the movies and votes in parallel.
+
+#### In Lab 4, `/movies-client` needed `NEXT_PUBLIC_MOVIES_API_URL`, and the API had to allow its origin (CORS). Why not any more? And what does `curl -i -X POST http://localhost:3000/api/movies` answer, and why?
+
+   * `/movies-client` now calls `/api/movies` using a relative URL, so the request goes to the same origin as the page. No public API URL or CORS configuration is needed. A POST request returns `405 Method Not Allowed` because the Route Handler only exports a `GET` method.
